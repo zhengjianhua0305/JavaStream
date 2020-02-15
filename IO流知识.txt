@@ -1,0 +1,107 @@
+I/O流知识
+
+·I/O的基础概念
+·I/O流知识的应用
+·一个实际的例子
+
+基础知识，什么是流
+
+·简单来说，流就是一种数据输入输出的统一管理。
+·系统帮我们定义了将流中的内容写到不同的外部设备中，编程时，我们只需要考虑的是如何将内存里的数据写到流中
+·流的方向的判定：
+
+参考的是我们自己的内存空间
+·输出流：FileOutputStream，是将内存空间数据 写 到外部设备
+·输入流：FileInputStream，是将外部数据 读 到内存中。
+
+·输出流就是写
+·输入流就是读
+
+
+流的种类
+·字符流，就是以字符为单位进行传输，字符流可以直接处理Unicode但是只能处理字符或者字符串
+·字节流，就是以字节为单位进行传输，字节流可以用于任何对象，但是不能直接处理Unicode字符
+
+什么时候用什么流
+·如果是处理纯文本，那么就用字符流
+·如果是处理图片、视频等，那么就用字节流
+
+字节流
+·字节流的操作均继承于抽象类
+    InputStream与OutputStream
+
+·一般对文件操作，则会使用
+    FileInoutStream与FileOutputStream
+
+
+
+·FileIutputStream输入流
+
+    String path = "D:/test.txt";
+    File file = new Path();
+    FileInputStream fis = new FileInputStream(file);
+    if(!file.exists()){
+    //如果没有就创建文件
+    file.createNewFile();
+    }
+
+    //1024是可创建的最大空间，以此来避免不知道文件有多大
+    byte[] in = new byte[1024];
+
+    //读取文件中内容
+    fis.read(in);
+    System.out.prinln(new String(in));
+
+
+
+·FileOutputStream输出流
+
+    String path = "D:/test.txt";
+    File file = new Path();
+    if(!file.exists()){
+    //如果没有就创建文件
+    file.createNewFile();
+    }
+    FileOutputStream fos = new FileOutputStream(file);
+    byte[] out = {'1','2','3'};
+    fos.write(out);
+
+
+·如果要储存对象，则可以使用
+    ObjectInputStream与ObjectOutputStream   
+
+·其中，input表示输入，即读；output标识输出，即写；
+
+·对象的操作ObjectInputStream与ObjectOutputStream
+
+
+
+字符流
+·字符流操作均继承与抽象类
+    Reader与Writer
+·一般的对文件进行操作，则会使用FileReader与FileWriter
+
+
+
+如何提高字节流效率
+·BufferedInputStream与BufferedOutputStream
+·因为字节流是通过byte来传输的，而byte的最大传输是1024，1024byte=1kb，传输的文件很小，那么我们需要怎么去优化他呢，
+那么我们就需要借助BufferedInputStream与BufferedOutputStream来进行传输，byte类似与我们每次传输都是以一个一个的字节，就好比是一个string，
+那么通过String【】数组我们每次传输就是一组一组的传，因此Buffered就是这个原理，我们通过Buffered加持，我们就是一组byte一组byte的传输。
+
+    InputStream is = new FileInputStream(sourcePath);
+        BufferedInputStream bis = new BufferedInputStream(is);
+
+        OutputStream os = new FileOutputStream(desPath);
+        BufferedOutputStream bos = new BufferedOutputStream(os);
+
+        byte[] in = new byte[1024];
+
+        int count= 0;
+        while ((count = bis.read(in)) != -1) {
+            bos.write(in, 0, count);
+        }
+        bis.close();
+        bos.close();
+
+
